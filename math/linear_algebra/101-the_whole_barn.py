@@ -1,15 +1,28 @@
 #!/usr/bin/env python3
-"""Add two matrices recursively."""
+"""Recursively add two matrices."""
 
 
 def add_matrices(mat1, mat2):
-    """Returns the element-wise sum of two matrices or None if shapes differ."""
+    """Returns element-wise sum of two matrices or None if shapes differ."""
+
+    # If types don't match, invalid
     if type(mat1) != type(mat2):
         return None
 
-    if isinstance(mat1, list):
-        if len(mat1) != len(mat2):
-            return None
-        return [add_matrices(m1, m2) for m1, m2 in zip(mat1, mat2)]
+    # If we reached numbers (base case)
+    if not isinstance(mat1, list):
+        return mat1 + mat2
 
-    return mat1 + mat2
+    # Must have same shape
+    if len(mat1) != len(mat2):
+        return None
+
+    # recursive addition
+    result = []
+    for i in range(len(mat1)):
+        res = add_matrices(mat1[i], mat2[i])
+        if res is None:
+            return None
+        result.append(res)
+
+    return result
