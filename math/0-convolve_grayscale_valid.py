@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Performs a valid convolution on grayscale images."""
+"""Module for valid convolution on grayscale images."""
 import numpy as np
 
 
@@ -7,31 +7,28 @@ def convolve_grayscale_valid(images, kernel):
     """Performs a valid convolution on grayscale images.
 
     Args:
-        images: numpy.ndarray with shape (m, h, w) containing multiple
-            grayscale images
-            m is the number of images
-            h is the height in pixels of the images
-            w is the width in pixels of the images
-        kernel: numpy.ndarray with shape (kh, kw) containing the kernel
-            for the convolution
-            kh is the height of the kernel
-            kw is the width of the kernel
+        images: numpy.ndarray with shape (m, h, w) containing
+                multiple grayscale images.
+        kernel: numpy.ndarray with shape (kh, kw) containing
+                the kernel for the convolution.
 
     Returns:
-        A numpy.ndarray containing the convolved images.
+        numpy.ndarray containing the convolved images.
     """
     m, h, w = images.shape
     kh, kw = kernel.shape
 
-    output_h = h - kh + 1
-    output_w = w - kw + 1
+    # Output dimensions for valid convolution
+    out_h = h - kh + 1
+    out_w = w - kw + 1
 
-    convolved = np.zeros((m, output_h, output_w))
+    # Initialize output array
+    output = np.zeros((m, out_h, out_w))
 
-    for i in range(output_h):
-        for j in range(output_w):
-            image_slice = images[:, i:i + kh, j:j + kw]
-            convolved[:, i, j] = np.sum(
-                image_slice * kernel, axis=(1, 2))
+    for i in range(out_h):
+        for j in range(out_w):
+            # Extract the image patch and apply the kernel
+            patch = images[:, i:i + kh, j:j + kw]
+            output[:, i, j] = np.sum(patch * kernel, axis=(1, 2))
 
-    return convolved
+    return output
